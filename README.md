@@ -1,82 +1,58 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Score des pays</title>
+    <title>Mini Tower Defense</title>
     <style>
+        /* Styles CSS pour la mise en page */
         body {
-            font-family: Arial, sans-serif;
             text-align: center;
-            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
         }
-        #country-score {
-            margin-top: 20px;
+        #game-board {
+            width: 400px;
+            height: 400px;
+            border: 1px solid black;
+            position: relative;
         }
-        button {
-            font-size: 24px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: white;
-            border: none;
+        .tower {
+            width: 40px;
+            height: 40px;
+            background-color: gray;
+            position: absolute;
             cursor: pointer;
         }
-        button:hover {
-            background-color: #0056b3;
+        .enemy {
+            width: 20px;
+            height: 20px;
+            background-color: red;
+            position: absolute;
+            animation: moveEnemy 4s linear infinite;
+        }
+        @keyframes moveEnemy {
+            0% { left: 0; top: 0; }
+            100% { left: 360px; top: 360px; }
         }
     </style>
 </head>
 <body>
-    <h1>Score des pays</h1>
-    <label for="country-select">Sélectionnez un pays :</label>
-    <select id="country-select">
-        <option value="USA">États-Unis</option>
-        <option value="France">France</option>
-        <option value="Allemagne">Allemagne</option>
-        <option value="Espagne">Espagne</option>
-    </select>
-    <button id="increase-score">Augmenter le score</button>
-    <div id="country-score">
-        <h2>Score actuel :</h2>
-        <p id="score">0</p>
+    <h1>Mini Tower Defense</h1>
+    <div id="game-board">
+        <!-- Zone de jeu -->
     </div>
+    <p>Cliquez sur le tableau pour placer des tours.</p>
 
     <script>
-        const countrySelect = document.getElementById('country-select');
-        const increaseButton = document.getElementById('increase-score');
-        const scoreDisplay = document.getElementById('score');
-
-        function setScore(country, score) {
-            localStorage.setItem(country, score);
+        // Fonction pour placer une tour au clic
+        function placeTower(event) {
+            const tower = document.createElement('div');
+            tower.className = 'tower';
+            tower.style.left = (event.clientX - 20) + 'px'; // 20 pour centrer la tour
+            tower.style.top = (event.clientY - 20) + 'px';
+            document.getElementById('game-board').appendChild(tower);
         }
 
-        function getScore(country) {
-            const score = localStorage.getItem(country);
-            return score ? parseInt(score) : 0;
-        }
-
-        function updateScoreDisplay() {
-            const selectedCountry = countrySelect.value;
-            const score = getScore(selectedCountry);
-            scoreDisplay.textContent = score;
-        }
-
-        increaseButton.addEventListener('click', () => {
-            const selectedCountry = countrySelect.value;
-            const currentScore = getScore(selectedCountry);
-            const newScore = currentScore + 1;
-            setScore(selectedCountry, newScore);
-            updateScoreDisplay();
-        });
-
-        window.addEventListener('load', () => {
-            updateScoreDisplay();
-        });
-
-        countrySelect.addEventListener('change', () => {
-            updateScoreDisplay();
-        });
+        // Ajoutez un gestionnaire d'événement pour placer une tour au clic
+        document.getElementById('game-board').addEventListener('click', placeTower);
     </script>
 </body>
 </html>
-
